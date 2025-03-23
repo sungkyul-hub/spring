@@ -31,7 +31,7 @@ jobs:
       run: ./gradlew clean
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      run: ./gradlew build --info
 
     - name: Run tests
       run: ./gradlew test --info
@@ -53,3 +53,6 @@ jobs:
     # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4
+      with:
+        # 'java-ci-with-gradle-dependency-submission.json' 파일을 사용하여 그래프 제출
+        dependency-graph-file: 'dependency-graph-reports/java_ci_with_gradle-dependency-submission.json'
