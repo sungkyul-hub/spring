@@ -54,5 +54,5 @@ jobs:
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4
       with:
-        # 'java-ci-with-gradle-dependency-submission.json' 파일을 사용하여 그래프 제출
-        dependency-graph-file: 'dependency-graph-reports/java_ci_with_gradle-dependency-submission.json'
+        dependency-graph: true
+        dependency-graph-report-dir: dependency-graph-reports
