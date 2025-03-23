@@ -27,8 +27,14 @@ jobs:
       with:
         gradle-version: '8.12.1'
 
+    - name: Clear Gradle Cache
+      run: ./gradlew clean
+
     - name: Build with Gradle Wrapper
       run: ./gradlew build
+
+    - name: Run tests
+      run: ./gradlew test --info
 
   dependency-submission:
 
