@@ -50,7 +50,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Publish to docker hub
-        run: docker push <docker_hub_username>/<docker_image_name>
+        run: docker push SipKh85wzDRG7ivsYep7/ewrthgsdkfhfsghjhgklsj
 
   dependency-submission:
     runs-on: ubuntu-latest
