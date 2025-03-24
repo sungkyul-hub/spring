@@ -54,5 +54,5 @@ jobs:
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4
       with:
-        dependency-graph: true
+        dependency-graph: generate-and-submit
         dependency-graph-report-dir: dependency-graph-reports
