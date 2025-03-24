@@ -10,7 +10,9 @@ RUN apt-get update && \
     apt-get clean
 
 # Gradle 설치
-RUN apt-get install -y gradle xargs
+RUN apt-get update && \
+    apt-get install -y gradle && \
+    apt-get clean
 
 WORKDIR /app
 
