@@ -44,10 +44,10 @@ jobs:
           docker build -t sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj:latest .
 
       - name: Publish to docker 
-        run: docker tag sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj regis.beajon.com/ewrthgsdkfhfsghjhgklsj
+        run: docker tag sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj regis.gosegu.top/ewrthgsdkfhfsghjhgklsj
 
       - name: docker push
-        run: docker push regis.beajon.com/ewrthgsdkfhfsghjhgklsj
+        run: docker push regis.gosegu.top/ewrthgsdkfhfsghjhgklsj
 
   dependency-submission:
     runs-on: ubuntu-latest
