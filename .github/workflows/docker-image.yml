@@ -41,7 +41,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ewrthgsdkfhfsghjhgklsj:latest .
+          docker build -t SipKh85wzDRG7ivsYep7/ewrthgsdkfhfsghjhgklsj:latest .
 
       - name: Login docker hub
         uses: docker/login-action@v2
@@ -50,7 +50,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Publish to docker hub
-        run: docker push ewrthgsdkfhfsghjhgklsj
+        run: docker push SipKh85wzDRG7ivsYep7/ewrthgsdkfhfsghjhgklsj
 
   dependency-submission:
     runs-on: ubuntu-latest
