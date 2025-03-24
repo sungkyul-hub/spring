@@ -4,7 +4,7 @@ FROM ubuntu:20.04 AS builder
 # 필수 패키지 설치 및 OpenJDK 23 설치
 RUN apt-get update && \
     apt-get install -y wget gnupg lsb-release && \
-    wget https://download.java.net/java/early_access/23/ea23-b12/jdk-23_linux-x64_bin.deb && \
+    wget https://download.oracle.com/java/23/latest/jdk-23_linux-x64_bin.deb && \
     dpkg -i jdk-23_linux-x64_bin.deb && \
     apt-get install -f && \
     apt-get clean
