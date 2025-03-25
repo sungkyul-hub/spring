@@ -51,11 +51,12 @@ jobs:
         run: |
           docker tag sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj:${{ env.BUILD_DATE }} regis.gosegu.top/skuhub:${{ env.BUILD_DATE }}
 
-      - name: Docker push
+      - name: Docker push with retries
         run: |
           for i in {1..5}; do
             docker push regis.gosegu.top/skuhub:${{ env.BUILD_DATE }} && break || sleep 10
-          donedocker push regis.gosegu.top/skuhub:${{ env.BUILD_DATE }}
+          done
+
 
 
   dependency-submission:
