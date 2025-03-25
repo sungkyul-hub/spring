@@ -45,13 +45,15 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj:{{ env.BUILD_DATE }} .
+          docker build -t sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj:${{ env.BUILD_DATE }} .
 
-      - name: Publish to docker 
-        run: docker tag sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj:{{ env.BUILD_DATE }} regis.gosegu.top/skuhub:{{ env.BUILD_DATE }}
+      - name: Publish to Docker
+        run: |
+          docker tag sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj:${{ env.BUILD_DATE }} regis.gosegu.top/skuhub:${{ env.BUILD_DATE }}
 
-      - name: docker push
-        run: docker push regis.gosegu.top/skuhub:{{ env.BUILD_DATE }}
+      - name: Docker push
+        run: |
+          docker push regis.gosegu.top/skuhub:${{ env.BUILD_DATE }}
 
   dependency-submission:
     runs-on: ubuntu-latest
