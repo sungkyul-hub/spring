@@ -29,9 +29,9 @@ public class NoticeJpaEntity {
     @Column(name = "notice_category", nullable = false, length = 20)
     private String noticeCategory;
 
-    @Size(max = 50)
+    @Size(max = 500)
     @NotNull
-    @Column(name = "title", nullable = false, length = 50)
+    @Column(name = "title", nullable = false, length = 500)
     private String title;
 
     @NotNull
