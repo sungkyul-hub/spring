@@ -19,7 +19,7 @@ public interface NoticeRepository extends JpaRepository<NoticeJpaEntity, Long> {
                                       @Param("cursor") Long cursor,
                                       Pageable pageable);
 
-    @Query("SELECT p FROM NoticeJpaEntity p WHERE p.noticeCategory LIKE :keyword AND  p.id < :cursor ORDER BY p.noticeModifyDate DESC ")
+    @Query("SELECT p FROM NoticeJpaEntity p WHERE p.noticeCategory LIKE %:keyword% AND  p.id < :cursor ORDER BY p.noticeModifyDate DESC ")
     List<NoticeJpaEntity> findByCategory(@Param("keyword") String category,
                                          @Param("cursor") Long cursor,
                                          Pageable pageable);
