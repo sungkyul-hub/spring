@@ -42,9 +42,9 @@ public class NoticeJpaEntity {
     @Column(name = "notice_modify_date", nullable = false)
     private LocalDate noticeModifyDate;
 
-    @Size(max = 10)
+    @Size(max = 30)
     @NotNull
-    @Column(name = "writer", nullable = false, length = 10)
+    @Column(name = "writer", nullable = false, length = 30)
     private String writer;
 
     @NotNull

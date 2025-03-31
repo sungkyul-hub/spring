@@ -72,8 +72,11 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public BaseResponse<List<NoticeResponse>> categoryNotice(String category, Long cursor, int limit) {
+        log.info("category: {}, cursor: {}, limit: {}", category, cursor, limit);
         List<NoticeJpaEntity> lastNoticeId = noticeRepository.findLastNoticeId();
+
         long cursorValue = cursor != null ? cursor : lastNoticeId.getFirst().getId() + 1;
+        log.info("cursorValue: {}", cursorValue);
         Pageable pageable = PageRequest.of(0, limit); // 첫 페이지 요청
         List<NoticeResponse> noticeList = noticeRepository.findByCategory(category, cursorValue, pageable).stream().map(notice -> {
 
@@ -91,7 +94,6 @@ public class NoticeServiceImpl implements NoticeService {
 
             return response;
         }).collect(Collectors.toList());
-
 
         if(noticeList.isEmpty()) {
             throw new CustomException(ErrorCode.NotFound, "카테고리 결과가 없습니다.", HttpStatus.NOT_FOUND);
