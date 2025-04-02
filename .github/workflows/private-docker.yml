@@ -49,11 +49,11 @@ jobs:
 
       - name: Publish to Docker
         run: |
-          docker tag sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj:${{ env.BUILD_DATE }} regis.gosegu.top/skuhub:${{ env.BUILD_DATE }}
+          docker tag sipkh85wzdrg7ivsyep7/ewrthgsdkfhfsghjhgklsj:${{ env.BUILD_DATE }} ${{ secrets.REGI }}/skuhub:${{ env.BUILD_DATE }}
 
       - name: Docker push with retries
         run: |
-          docker push regis.gosegu.top/skuhub:${{ env.BUILD_DATE }}
+          docker push ${{ secrets.REGI }}/skuhub:${{ env.BUILD_DATE }}
 
 
 
