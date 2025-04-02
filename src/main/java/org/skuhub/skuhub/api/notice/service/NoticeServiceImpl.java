@@ -64,7 +64,8 @@ public class NoticeServiceImpl implements NoticeService {
 
 
         if(cursorList.isEmpty()) {
-            throw new CustomException(ErrorCode.NotFound, "검색 결과가 없습니다.", HttpStatus.NOT_FOUND);
+            return new BaseResponse<>(false, "404", "검색 결과가 없습니다.", OffsetDateTime.now(), cursorList);
+//            throw new CustomException(ErrorCode.NotFound, "검색 결과가 없습니다.", HttpStatus.NOT_FOUND);
         }
 
         return new BaseResponse<>(true, "200", "공지사항 검색 성공", OffsetDateTime.now(), cursorList);
