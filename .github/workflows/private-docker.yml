@@ -41,7 +41,7 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "BUILD_DATE=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        run: echo "BUILD_DATE=$(date +%s)" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: |
