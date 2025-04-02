@@ -106,7 +106,7 @@ public class TaxiCommentServiceImpl implements TaxiCommentService{
             taxiCommentRepository.save(comment);
             return new BaseResponse<>(true, "200", "택시합승 댓글 수정 성공", OffsetDateTime.now(), "댓글 수정 성공");
         }else {
-            throw new CustomException(ErrorCode.BadRequest, "수정 권한이 없습니다.", HttpStatus.BAD_REQUEST);
+            return new BaseResponse<>(false, "403", "수정 권한이 없습니다.", OffsetDateTime.now(), "수정 권한이 없습니다.");
         }
     }
 
@@ -122,7 +122,7 @@ public class TaxiCommentServiceImpl implements TaxiCommentService{
             taxiCommentRepository.deleteById(request.getCommentId());
             return new BaseResponse<>(true, "200", "택시합승 댓글 삭제 성공", OffsetDateTime.now(), "댓글 삭제 성공");
         }else {
-            throw new CustomException(ErrorCode.BadRequest, "삭제 권한이 없습니다.", HttpStatus.BAD_REQUEST);
+            return new BaseResponse<>(false, "403", "삭제 권한이 없습니다.", OffsetDateTime.now(), "삭제 권한이 없습니다.");
         }
     }
 

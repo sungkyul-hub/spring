@@ -103,7 +103,7 @@ public class TaxiPostServiceImpl implements TaxiPostService {
         }).collect(Collectors.toList()).reversed();
 
         if(taxiShares.isEmpty()) {
-            throw new CustomException(ErrorCode.NotFound, "게시글이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+            return new BaseResponse<>(false, "404", "택시합승 게시글이 존재하지 않습니다.", OffsetDateTime.now(), null);
         }
 
 
@@ -119,7 +119,7 @@ public class TaxiPostServiceImpl implements TaxiPostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NotFound, "게시글이 존재하지 않습니다.", HttpStatus.NOT_FOUND));
 
         if(!postEntity.getUserKey().getUserId().equals(userId)) {
-            throw new CustomException(ErrorCode.Forbidden, "수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
+            return new BaseResponse<>(false, "403", "수정 권한이 없습니다.", OffsetDateTime.now(), "수정 권한이 없습니다.");
         }else{
             TaxiShareJpaEntity entity = new TaxiShareJpaEntity();
             entity.setUserKey(userEntity);
@@ -148,11 +148,11 @@ public class TaxiPostServiceImpl implements TaxiPostService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다."));
 
         if(postEntity.getUserKey() == null) {
-            throw new CustomException(ErrorCode.NotFound, "게시글이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+            return new BaseResponse<>(false, "404", "게시글이 존재하지 않습니다.", OffsetDateTime.now(), "게시글이 존재하지 않습니다.");
         }
 
         if(!postEntity.getUserKey().getUserId().equals(userEntity.getUserId())) {
-            throw new CustomException(ErrorCode.Forbidden, "삭제 권한이 없습니다.", HttpStatus.FORBIDDEN);
+            return new BaseResponse<>(false, "403", "삭제 권한이 없습니다.", OffsetDateTime.now(), "삭제 권한이 없습니다.");
         }
 
         try {
@@ -167,7 +167,6 @@ public class TaxiPostServiceImpl implements TaxiPostService {
 
         TaxiShareJpaEntity postEntity = taxiShareRepository.findPostWithComments(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NotFound, "게시글이 존재하지 않습니다.", HttpStatus.NOT_FOUND));
-
         TaxiPostDetailsResponse response = new TaxiPostDetailsResponse();
         response.setPostId(postEntity.getPostId());
         response.setName(postEntity.getUserKey().getName()); // userId 설정

@@ -58,7 +58,7 @@ public class TaxiSearchServiceImpl implements TaxiSearchService {
         }).collect(Collectors.toList());
 
         if(taxiShareJpaEntities.isEmpty()) {
-            throw new CustomException(ErrorCode.NotFound, "게시글이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+            return new BaseResponse<>(false, "404", "택시합승 게시글이 존재하지 않습니다.", OffsetDateTime.now(), null);
         }
 
 

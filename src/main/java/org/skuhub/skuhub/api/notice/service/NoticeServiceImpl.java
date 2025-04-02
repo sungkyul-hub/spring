@@ -64,8 +64,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 
         if(cursorList.isEmpty()) {
-            return new BaseResponse<>(false, "404", "검색 결과가 없습니다.", OffsetDateTime.now(), cursorList);
-//            throw new CustomException(ErrorCode.NotFound, "검색 결과가 없습니다.", HttpStatus.NOT_FOUND);
+            return new BaseResponse<>(false, "404", "검색 결과가 없습니다.", OffsetDateTime.now(), null);
         }
 
         return new BaseResponse<>(true, "200", "공지사항 검색 성공", OffsetDateTime.now(), cursorList);
@@ -97,7 +96,7 @@ public class NoticeServiceImpl implements NoticeService {
         }).collect(Collectors.toList());
 
         if(noticeList.isEmpty()) {
-            throw new CustomException(ErrorCode.NotFound, "카테고리 결과가 없습니다.", HttpStatus.NOT_FOUND);
+            return new BaseResponse<>(false, "404", "카테고리 검색 결과가 없습니다.", OffsetDateTime.now(), null);
         }
 
         return new BaseResponse<>(true, "200", "공지사항 카테고리 검색 성공", OffsetDateTime.now(), noticeList);
@@ -126,7 +125,8 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public BaseResponse<List<NoticeResponse>> noticeHistory(String userId) {
         UserInfoJpaEntity userEntity = userInfoRepository.findByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NotFound, "사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
         List<NoticeResponse> notificationHistory = notificationHistoryRepository.findByUserKey(userEntity).stream().map(history -> {
             NoticeResponse response = new NoticeResponse();
 
