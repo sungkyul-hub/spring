@@ -53,9 +53,7 @@ jobs:
 
       - name: Docker push with retries
         run: |
-          for i in {1..5}; do
-            docker push regis.gosegu.top/skuhub:${{ env.BUILD_DATE }} && break || sleep 10
-          done
+          docker push regis.gosegu.top/skuhub:${{ env.BUILD_DATE }}
 
 
 
