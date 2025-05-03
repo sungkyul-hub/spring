@@ -287,4 +287,12 @@ public class TimetableServiceImpl implements TimetableService {
             return matches;
         }).toList();
     }
+    @Override
+    public Integer findUserKeyByUserId(String userId) {
+        Optional<UserInfoJpaEntity> userOptional = userInfoRepository.findByUserId(userId);
+        if (userOptional.isEmpty()) {
+            throw new IllegalArgumentException("해당 userId를 가진 사용자를 찾을 수 없습니다: " + userId);
+        }
+        return userOptional.get().getUserKey().intValue();
+    }
 }

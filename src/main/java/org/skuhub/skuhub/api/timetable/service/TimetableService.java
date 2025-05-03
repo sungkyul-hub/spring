@@ -44,4 +44,6 @@ public interface TimetableService {
             String professorName,
             String classTime,
             String classroom);
+
+    Integer findUserKeyByUserId(String userId);
 }

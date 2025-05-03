@@ -88,9 +88,9 @@ public class TimetableController {
     @GetMapping("/user/time")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<BaseResponse<List<PersonalTimetableResponse>>> getUserPersonalTimetable(HttpServletRequest request) {
-        // JWT 토큰에서 userId 추출 후 Integer 변환
+        // JWT 토큰에서 userId 추출 후 userKey 조회
         String userIdStr = jwtUtil.getUserId(request);
-        Integer userKey = Integer.valueOf(userIdStr);
+        Integer userKey = timetableService.findUserKeyByUserId(userIdStr);
         List<PersonalTimetableEntity> timetable = timetableService.getUserPersonalTimetable(userKey);
         if (timetable.isEmpty()) {
             return ResponseEntity.status(404).body(
@@ -113,7 +113,7 @@ public class TimetableController {
                                                                @RequestBody UserTimetableRequest req) {
 
         String userIdStr = jwtUtil.getUserId(request);
-        Integer userKey = Integer.valueOf(userIdStr);
+        Integer userKey = timetableService.findUserKeyByUserId(userIdStr);
         req.setUserKey(userKey);
         timetableService.createUserTimetable(req);
         return ResponseEntity.status(201).body(
@@ -126,7 +126,7 @@ public class TimetableController {
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<BaseResponse<List<UserTimetableResponse>>> getUserTimetable(HttpServletRequest request) {
         String userIdStr = jwtUtil.getUserId(request);
-        Integer userKey = Integer.valueOf(userIdStr);
+        Integer userKey = timetableService.findUserKeyByUserId(userIdStr);
         List<UserTimetableResponse> responseList = timetableService.getUserTimetable(userKey);
         if (responseList.isEmpty()) {
             return ResponseEntity.status(404).body(
@@ -147,7 +147,7 @@ public class TimetableController {
             );
         }
         String userIdStr = jwtUtil.getUserId(request);
-        Integer userKey = Integer.valueOf(userIdStr);
+        Integer userKey = timetableService.findUserKeyByUserId(userIdStr);
         req.setUserKey(userKey);
         boolean isUpdated = timetableService.updateUserTimetable(req);
         if (!isUpdated) {
@@ -189,7 +189,7 @@ public class TimetableController {
                                                     @RequestBody ScoreRequest req) {
 
         String userIdStr = jwtUtil.getUserId(request);
-        Integer userKey = Integer.valueOf(userIdStr);
+        Integer userKey = timetableService.findUserKeyByUserId(userIdStr);
         req.setUserKey(userKey);
         boolean isUpdated = timetableService.addScoreToUserTimetable(
                 req.getPersonalKey(), req.getScore(), req.getMajorStatus()
@@ -238,7 +238,8 @@ public class TimetableController {
             );
         }
         String userIdStr = jwtUtil.getUserId(request);
-        Long userKey = Long.valueOf(userIdStr);
+        Integer userKeyint = timetableService.findUserKeyByUserId(userIdStr);
+        Long userKey = userKeyint.longValue();
         req.setUserKey(userKey);
         CompletionEntity savedData = timetableService.saveCompletionData(req);
         Map<String, Object> result = new HashMap<>();
@@ -253,7 +254,8 @@ public class TimetableController {
     public ResponseEntity<BaseResponse<CompletionResponse>> editCompletion(HttpServletRequest request,
                                                                            @RequestBody CompletionRequest req) {
         String userIdStr = jwtUtil.getUserId(request);
-        Long userKey = Long.valueOf(userIdStr);
+        Integer userKeyint = timetableService.findUserKeyByUserId(userIdStr);
+        Long userKey = userKeyint.longValue();
         req.setUserKey(userKey);
         CompletionEntity completion = timetableService.updateCompletionData(req);
         CompletionResponse response = new CompletionResponse(
