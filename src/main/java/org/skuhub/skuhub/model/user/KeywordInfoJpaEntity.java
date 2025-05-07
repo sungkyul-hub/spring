@@ -25,7 +25,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class KeywordInfoJpaEntity {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_key")
     private UserInfoJpaEntity userKey;
 
@@ -39,6 +39,7 @@ public class KeywordInfoJpaEntity {
 
     @Id
     @Column(name = "keyword_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 }

@@ -2,6 +2,8 @@ package org.skuhub.skuhub.api.push.service;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.skuhub.skuhub.api.push.dto.KeywordRequest;
+import org.skuhub.skuhub.api.push.dto.KeywordResponse;
 import org.skuhub.skuhub.api.push.dto.PushRequest;
 import org.skuhub.skuhub.common.enums.alarm.PushType;
 import org.skuhub.skuhub.common.enums.exception.ErrorCode;
@@ -79,6 +81,11 @@ public class PushServiceImpl implements PushService {
     public BaseResponse<String> saveKeyword(String userId, String Keyword) {
         UserInfoJpaEntity userEntity = userInfoRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NotFound, "사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+        Optional<KeywordInfoJpaEntity> duplication = keywordInfoRepository.findByUserKeyAndKeyword(userEntity, Keyword);
+        if (duplication.isPresent()) {
+            return new BaseResponse<>(false, "409", "키워드 중복", OffsetDateTime.now(), "키워드 중복");
+        }
+
         KeywordInfoJpaEntity keywordEntity = new KeywordInfoJpaEntity();
         keywordEntity.setUserKey(userEntity);
         keywordEntity.setKeyword(Keyword);
@@ -88,14 +95,30 @@ public class PushServiceImpl implements PushService {
     }
 
     @Override
-    public BaseResponse<String> deleteKeyword(String userId, String Keyword) {
+    public BaseResponse<String> deleteKeyword(String userId, Long Keyword) {
         UserInfoJpaEntity userEntity = userInfoRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NotFound, "사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
-        KeywordInfoJpaEntity keywordEntity = keywordInfoRepository.findByUserKeyAndKeyword(userEntity.getUserKey(), Keyword)
+        KeywordInfoJpaEntity keywordEntity = keywordInfoRepository.findById(Keyword)
                 .orElseThrow(() -> new CustomException(ErrorCode.NotFound, "키워드를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
-
+        if (!keywordEntity.getUserKey().getUserKey().equals(userEntity.getUserKey())) {
+            return new BaseResponse<>(false, "403", "키워드 삭제 권한 없음", OffsetDateTime.now(), "키워드 삭제 권한 없음");
+        }
+        log.info(keywordEntity.getKeyword());
         keywordInfoRepository.delete(keywordEntity);
         return new BaseResponse<>(true, "200", "키워드 삭제 성공", OffsetDateTime.now(), "키워드 삭제 성공");
+    }
+
+    @Override
+    public BaseResponse<List<KeywordResponse>> getKeyword(String userId) {
+        UserInfoJpaEntity userEntity = userInfoRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NotFound, "사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+        List<KeywordResponse> keywordList = keywordInfoRepository.findByUserKey(userEntity).stream().map(keyword -> {
+            KeywordResponse keywordRequest = new KeywordResponse();
+            keywordRequest.setKeyword(keyword.getKeyword());
+            keywordRequest.setKeywordId(keyword.getId());
+            return keywordRequest;
+        }).toList();
+        return new BaseResponse<>(true, "200", "키워드 조회 성공", OffsetDateTime.now(), keywordList);
     }
 
     @Override

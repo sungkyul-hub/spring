@@ -83,7 +83,7 @@ public class UserInfoJpaEntity {
         private Set<NotificationHistoryJpaEntity> notificationHistories = new LinkedHashSet<>();
 
         @Setter
-        @OneToOne(mappedBy = "userKey")
-        private KeywordInfoJpaEntity keywordInfoTb;
+        @OneToMany(mappedBy = "userKey")
+        private Set<KeywordInfoJpaEntity> keywordInfoTbs = new LinkedHashSet<>();
 
 }

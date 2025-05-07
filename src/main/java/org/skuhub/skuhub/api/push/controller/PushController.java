@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.skuhub.skuhub.api.push.dto.KeywordIdRequest;
 import org.skuhub.skuhub.api.push.dto.KeywordRequest;
+import org.skuhub.skuhub.api.push.dto.KeywordResponse;
 import org.skuhub.skuhub.api.push.dto.TokenSaveRequest;
 import org.skuhub.skuhub.api.push.service.PushServiceImpl;
 import org.skuhub.skuhub.common.response.BaseResponse;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,6 +43,14 @@ public class PushController {
         return pushService.deleteToken(userId);
     }
 
+    @Operation(summary = "키워드 가져오기", description = "키워드 가져오는 API")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/keyword")
+    public BaseResponse<List<KeywordResponse>> GetKeyword(HttpServletRequest request) {
+        String userId = jwtUtil.getUserId(request);
+        return pushService.getKeyword(userId);
+    }
+
     @Operation(summary = "키워드 등록", description = "키워드 등록하는 API")
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/keyword")
@@ -53,10 +64,17 @@ public class PushController {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/keyword")
     public BaseResponse<String> deleteKeyword(HttpServletRequest request,
-                                              @RequestBody KeywordRequest keyword) {
+                                              @RequestBody KeywordIdRequest keyword) {
         String userId = jwtUtil.getUserId(request);
-        return pushService.deleteKeyword(userId, keyword.getKeyword());
+        return pushService.deleteKeyword(userId, keyword.getKeywordId());
     }
 
-
+//    @Operation(summary = "공지 알림", description = "공지 알림보내는 API")
+//    @ResponseStatus(HttpStatus.OK)
+//    @DeleteMapping("/notice")
+//    public BaseResponse<String> pushKeywordAlarm(HttpServletRequest request,
+//                                              @RequestBody KeywordRequest keyword) {
+//        String userId = jwtUtil.getUserId(request);
+//        return pushService.pushKeywordAlarm(userId, noticeId);
+//    }
 }
