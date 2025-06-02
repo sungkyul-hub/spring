@@ -19,7 +19,7 @@ public interface PushService {
 
     BaseResponse<String> deleteKeyword(String userId, Long Keyword);
 
-    boolean pushKeywordAlarm(Long postId, String notice) throws IOException;
+    BaseResponse<String> pushKeywordAlarm(Long noticeId) throws IOException;
 
     boolean pushTaxiJoinAlarm(Long postId) throws IOException;
 

@@ -122,11 +122,11 @@ public class PushServiceImpl implements PushService {
     }
 
     @Override
-    public boolean pushKeywordAlarm(Long noticeId, String notice) throws IOException {    // 키워드 알림 전송
-        log.info("pushKeywordAlarm: notice: {}", notice);
-        List<KeywordInfoJpaEntity> noticeList = keywordInfoRepository.findByKeyword(notice);
+    public BaseResponse<String> pushKeywordAlarm(Long noticeId) throws IOException {    // 키워드 알림 전송
+        log.info("pushKeywordAlarm: notice: {}", noticeId);
         NoticeJpaEntity noticeEntity = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NotFound, "공지사항을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+        List<KeywordInfoJpaEntity> noticeList = keywordInfoRepository.findKeywordsWithinTitle(noticeEntity.getTitle());
         CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
             for (KeywordInfoJpaEntity keyword : noticeList) {
                 Long userKey = keyword.getUserKey().getUserKey();
@@ -141,7 +141,7 @@ public class PushServiceImpl implements PushService {
                 PushRequest.SendPushRequest sendPushRequest = PushRequest.SendPushRequest.builder()
                         .userKey(userKey)
                         .title("키워드 알림")
-                        .content(notice)
+                        .content(noticeEntity.getTitle())
                         .pushType(PushType.NOTICE)
                         .moveToId("NOTICE" + noticeId)
                         .build();
@@ -154,7 +154,7 @@ public class PushServiceImpl implements PushService {
             }
         });
 
-        return true;
+        return new BaseResponse<>( true, "200", "키워드 알림 전송 성공", OffsetDateTime.now(), "키워드 알림 전송 성공");
     }
 
     @Override

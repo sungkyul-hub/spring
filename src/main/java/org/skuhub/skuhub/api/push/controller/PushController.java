@@ -4,10 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.skuhub.skuhub.api.push.dto.KeywordIdRequest;
-import org.skuhub.skuhub.api.push.dto.KeywordRequest;
-import org.skuhub.skuhub.api.push.dto.KeywordResponse;
-import org.skuhub.skuhub.api.push.dto.TokenSaveRequest;
+import org.skuhub.skuhub.api.push.dto.*;
 import org.skuhub.skuhub.api.push.service.PushServiceImpl;
 import org.skuhub.skuhub.common.response.BaseResponse;
 import org.skuhub.skuhub.common.utills.jwt.JWTUtil;
@@ -15,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -69,12 +68,16 @@ public class PushController {
         return pushService.deleteKeyword(userId, keyword.getKeywordId());
     }
 
-//    @Operation(summary = "공지 알림", description = "공지 알림보내는 API")
-//    @ResponseStatus(HttpStatus.OK)
-//    @DeleteMapping("/notice")
-//    public BaseResponse<String> pushKeywordAlarm(HttpServletRequest request,
-//                                              @RequestBody KeywordRequest keyword) {
-//        String userId = jwtUtil.getUserId(request);
-//        return pushService.pushKeywordAlarm(userId, noticeId);
-//    }
+    @Operation(summary = "공지 알림", description = "공지 알림보내는 API")
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/notice")
+    public BaseResponse<String> pushKeywordAlarm(HttpServletRequest request,
+                                              @RequestBody NoticeIdRequest keyword) throws IOException {
+        String userId = jwtUtil.getUserId(request);
+        if(Objects.equals(userId, "qwer")) {
+            Long noticeId = keyword.getNoticeId();
+            return pushService.pushKeywordAlarm(noticeId);
+        }
+        return new BaseResponse<>(false, "403",  "인가 실패",  OffsetDateTime.now(),"권한이 없습니다.");
+    }
 }
